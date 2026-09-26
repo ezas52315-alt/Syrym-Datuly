@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9-сынып. Қазақ әдебиеті | Сырым Датұлы</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        gold: {
+                            100: '#FEF08A',
+                            300: '#FDE047',
+                            400: '#FACC15',
+                            500: '#D4AF37',
+                            600: '#AA8C2C',
+                        },
+                        kzblue: {
+                            950: '#061121',
+                            900: '#0B1E36',
+                            800: '#153255',
+                            700: '#1F4B82',
+                            600: '#2A64AD',
+                            100: '#D1E4FA',
+                            50: '#E8F1FC',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, rgba(31, 75, 130, 0.08) 0%, rgba(212, 175, 55, 0.08) 100%), #E8F1FC;
+            background-attachment: fixed;
+            position: relative;
+            color: #0B1E36; /* Default text color is deep blue, NOT black */
+        }
+        
+        /* Gradient Border - Deep Blue to Gold */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 6px solid transparent;
+            background: linear-gradient(135deg, #1F4B82, #D4AF37) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .tab-content { display: none; animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .tab-content.active { display: block; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Pure Glassmorphism Panels (No Black) */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px 0 rgba(11, 30, 54, 0.15); /* Deep blue shadow */
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-top: 1px solid rgba(255, 255, 255, 0.8);
+            border-left: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 32px 0 rgba(21, 50, 85, 0.1); /* Deep blue shadow */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(212, 175, 55, 0.2); /* Gold shadow on hover */
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        /* TV Show Jeopardy Game Styles (Deep Blue & Gold) */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            background: rgba(11, 30, 54, 0.7);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 2px solid rgba(212, 175, 55, 0.5);
+            box-shadow: inset 0 0 30px rgba(11, 30, 54, 0.8), 0 10px 30px rgba(11, 30, 54, 0.3);
+            backdrop-filter: blur(15px);
+        }
+        
+        .game-card {
+            background: linear-gradient(180deg, rgba(31, 75, 130, 0.9) 0%, rgba(11, 30, 54, 0.95) 100%);
+            color: #FACC15;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.25rem;
+            font-weight: bold;
+            font-family: 'Playfair Display', serif;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            border: 2px solid rgba(212, 175, 55, 0.6);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 10px rgba(11, 30, 54, 0.5), inset 0 2px 10px rgba(255,255,255,0.1);
+            text-shadow: 0px 2px 5px rgba(11, 30, 54, 0.9);
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 15px 25px rgba(11, 30, 54, 0.6), inset 0 2px 10px rgba(255,255,255,0.3);
+            color: #ffffff;
+            background: linear-gradient(180deg, rgba(42, 100, 173, 0.9) 0%, rgba(21, 50, 85, 0.95) 100%);
+            border-color: #FACC15;
+        }
+        
+        .game-card.played {
+            background: rgba(31, 75, 130, 0.2);
+            color: transparent;
+            border-color: rgba(31, 75, 130, 0.3);
+            cursor: not-allowed;
+            pointer-events: none;
+            box-shadow: inset 0 0 15px rgba(11, 30, 54, 0.4);
+            text-shadow: none;
+        }
+
+        /* Custom Scrollbar - Blue Tone */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(209, 228, 250, 0.5); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: rgba(31, 75, 130, 0.4); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(31, 75, 130, 0.7); }
+        
+        /* Modal Backgrounds - Deep Blue Instead of Black */
+        .modal-overlay {
+            background: rgba(11, 30, 54, 0.85); /* kzblue-900 with opacity */
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col selection:bg-gold-300 selection:text-kzblue-900">
+
+    <header class="bg-kzblue-900 text-white shadow-lg sticky top-0 z-40 border-b-2 border-gold-500">
+        <div class="max-w-7xl mx-auto px-4 py-4 md:py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-center md:text-left">
+                    <p class="text-sm md:text-base text-gold-400 font-semibold tracking-wider uppercase mb-1">9-сынып. Қазақ әдебиеті</p>
+                    <h1 class="text-2xl md:text-3xl font-serif font-bold tracking-wide text-white drop-shadow-md">Сырым Датұлы. «Балаби мен Сырым»</h1>
+                </div>
+            </div>
+            
+            <nav class="mt-6 flex overflow-x-auto pb-2 custom-scrollbar gap-3 justify-start md:justify-center">
+                <button onclick="playClick(); switchTab('home')" class="tab-btn active whitespace-nowrap px-6 py-2.5 rounded-full font-semibold text-sm transition-all bg-gold-500 text-kzblue-950 hover:bg-gold-400 shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+                    <i class="fas fa-home mr-2"></i> Басты бет
+                </button>
+                <button onclick="playClick(); switchTab('analysis')" class="tab-btn whitespace-nowrap px-6 py-2.5 rounded-full font-semibold text-sm transition-all bg-kzblue-800 text-kzblue-100 hover:bg-kzblue-700 border border-kzblue-600">
+                    <i class="fas fa-pen-nib mr-2"></i> Нақыл сөздер
+                </button>
+                <button onclick="playClick(); switchTab('story')" class="tab-btn whitespace-nowrap px-6 py-2.5 rounded-full font-semibold text-sm transition-all bg-kzblue-800 text-kzblue-100 hover:bg-kzblue-700 border border-kzblue-600">
+                    <i class="fas fa-book-open mr-2"></i> Шешендік сөз
+                </button>
+                <button onclick="playClick(); switchTab('game')" class="tab-btn whitespace-nowrap px-6 py-2.5 rounded-full font-semibold text-sm transition-all bg-kzblue-800 text-kzblue-100 hover:bg-kzblue-700 border border-kzblue-600">
+                    <i class="fas fa-brain mr-2"></i> Зияткерлік алаң
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 py-8">
+        
+        <!-- ТАБ 1: БАСТЫ БЕТ -->
+        <section id="home" class="tab-content active">
+            
+            <!-- Biography Card -->
+            <div class="glass-panel rounded-3xl overflow-hidden mb-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12">
+                    <div class="lg:col-span-4 relative min-h-[300px] lg:min-h-full">
+                        <div class="absolute inset-0 bg-kzblue-900/10 mix-blend-multiply z-10"></div>
+                        <img src="https://massaget.kz/userdata/news/news_29888/image_l.jpg" alt="Сырым Датұлы" class="absolute inset-0 w-full h-full object-cover object-top">
+                        <div class="absolute inset-0 bg-gradient-to-t from-kzblue-900 via-transparent to-transparent z-20"></div>
+                        <div class="absolute bottom-4 left-4 right-4 z-30 text-white">
+                            <h3 class="text-2xl font-serif font-bold drop-shadow-lg">Сырым Датұлы</h3>
+                            <p class="text-gold-300 text-sm font-semibold uppercase tracking-widest mt-1">(1712 - 1802)</p>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-8 p-6 md:p-10 relative">
+                        <!-- Decorative quote mark -->
+                        <i class="fas fa-quote-right absolute top-6 right-8 text-6xl text-kzblue-700 opacity-10"></i>
+                        
+                        <h2 class="text-3xl font-serif font-bold text-kzblue-900 mb-6 pb-2 border-b-2 border-gold-500 inline-block">Елдің бітімшісі, әділ би</h2>
+                        <div class="space-y-4 text-kzblue-900 leading-relaxed text-justify font-medium text-lg">
+                            <p>Өз заманында Сырым Датұлы жер мен жесір дауы, адам құқығы, ұрлық, барымта және тағы да басқа қоғамдағы орын алған дауларға араласып, тура, әділ билік айтып, <span class="font-bold text-kzblue-700 bg-kzblue-100 px-2 py-0.5 rounded">елдің бітімшісі</span> ретінде танылған.</p>
+                            
+                            <p>Ол кез келген шым-шытырық дау-шарды егжей-тегжейлі саралап, жіктеп сөйлей білген үлкен шешен, қазақ тарихындағы ірі саяси қайраткер, Кіші жүз қазақтарының ұлт-азаттық көтерілісінің көсемі.</p>
+                            
+                            <div class="mt-6 flex items-center gap-4 bg-white/40 p-4 rounded-xl border border-white/60">
+                                <div class="bg-gold-500 text-kzblue-950 w-12 h-12 flex items-center justify-center rounded-full text-xl flex-shrink-0">
+                                    <i class="fas fa-balance-scale"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-kzblue-900">Шешендік өнер шыңы</h4>
+                                    <p class="text-sm text-kzblue-800">«Балаби мен Сырым» оқиғасы оның қисынды ойлау, сөз табу және келіссөз жүргізу шеберлігінің айқын дәлелі.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ТАБ 1.5: НАҚЫЛ СӨЗДЕР (Жаңа интерактивті таб) -->
+        <section id="analysis" class="tab-content">
+            <div class="mb-8 text-center bg-white/30 p-6 rounded-2xl border border-white/50 backdrop-blur-md">
+                <h2 class="text-3xl font-serif font-bold text-kzblue-900 mb-3"><i class="fas fa-pen-nib text-gold-500 mr-3"></i>Өзіндік талдау</h2>
+                <p class="text-kzblue-800 font-medium max-w-3xl mx-auto">Әр нақыл сөздің мағынасын, көркемдігін және бүгінгі маңызын <span class="font-bold text-kzblue-900 bg-gold-300/50 px-2 rounded">өз сөзіңізбен жазыңыз</span>. Барлық ұяшықтарды толтырған соң ғана үлгі жауап ашылады.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Panel 1 -->
+                <div class="glass-card rounded-2xl p-6 flex flex-col h-full relative overflow-hidden group">
+                    <div class="text-center mb-6 relative z-10 border-b border-kzblue-200 pb-4">
+                        <i class="fas fa-comment-dots text-3xl text-gold-500 mb-3"></i>
+                        <h4 class="font-serif font-bold text-xl text-kzblue-900 italic leading-snug">
+                            «Сөз анасы – құлақтан,<br>
+                            Су анасы – бұлақтан,<br>
+                            Дін анасы – ұяттан,<br>
+                            Жол анасы – тұяқтан.»
+                        </h4>
+                    </div>
+                    
+                    <!-- Student Inputs -->
+                    <div class="space-y-4 flex-grow relative z-10" id="student-inputs-1">
+                        <div>
+                            <label class="block font-bold text-kzblue-800 uppercase tracking-wide text-xs mb-1.5"><i class="fas fa-history text-gold-600 mr-1"></i> Мағынасы мен тарихи контексті</label>
+                            <textarea id="ta-magyna-1" rows="2" class="w-full bg-kzblue-100/30 border border-kzblue-300/50 rounded-lg p-3 text-kzblue-900 placeholder-kzblue-800/40 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:bg-white/60 transition-all custom-scrollbar resize-none" placeholder="Өз ойыңызды осында жазыңыз..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-kzblue-800 uppercase tracking-wide text-xs mb-1.5"><i class="fas fa-paint-brush text-gold-600 mr-1"></i> Көркемдік құндылығы</label>
+                            <textarea id="ta-korkemdik-1" rows="2" class="w-full bg-kzblue-100/30 border border-kzblue-300/50 rounded-lg p-3 text-kzblue-900 placeholder-kzblue-800/40 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:bg-white/60 transition-all custom-scrollbar resize-none" placeholder="Өз ойыңызды осында жазыңыз..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-kzblue-800 uppercase tracking-wide text-xs mb-1.5"><i class="fas fa-lightbulb text-gold-600 mr-1"></i> Бүгінгі маңызы</label>
+                            <textarea id="ta-bugingi-1" rows="2" class="w-full bg-kzblue-100/30 border border-kzblue-300/50 rounded-lg p-3 text-kzblue-900 placeholder-kzblue-800/40 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:bg-white/60 transition-all custom-scrollbar resize-none" placeholder="Өз ойыңызды осында жазыңыз..."></textarea>
+                        </div>
+                        
+                        <button id="btn-check-1" onclick="checkAndShowModel(1)" class="w-full mt-2 bg-kzblue-800 hover:bg-kzblue-700 text-white font-semibold py-2.5 rounded-xl transition-all shadow-md">
+                            <i class="fas fa-check-circle mr-1"></i> Жауапты сақтау және Үлгіні көру
+                        </button>
+                    </div>
+                    
+                    <!-- Model Answer (Hidden initially) -->
+                    <div id="model-answer-1" class="hidden mt-6 pt-4 border-t-2 border-gold-400 border-dashed animate-[fadeIn_0.5s_ease-in-out]">
+                        <h5 class="text-center font-bold text-gold-600 uppercase tracking-widest text-xs mb-4 bg-gold-100/30 py-1 rounded-full border border-gold-300/50"><i class="fas fa-star mr-1"></i> Үлгі жауап</h5>
+                        <div class="space-y-3 text-sm">
+                            <p class="text-kzblue-900"><span class="font-bold text-kzblue-800">Мағынасы:</span> Қоғамдағы әр құбылыстың түп тамыры болатынын меңзейді. Сөзді дұрыс тыңдай білу құлаққа, діннің негізі ар-ұятқа, ал ұзақ жолды еңсеру көлікке (тұяққа) байланысты екенін айтып, заманауи болмысты сипаттайды.</p>
+                            <div class="bg-kzblue-900/5 h-px w-full my-1"></div>
+                            <p class="text-kzblue-900"><span class="font-bold text-kzblue-800">Көркемдігі:</span> Анафоралық қайталаулар («анасы») мен рифма (құлақтан, бұлақтан, ұяттан, тұяқтан) сөздің ырғағын үдетіп, мақал-мәтелдік деңгейге көтерген.</p>
+                            <div class="bg-kzblue-900/5 h-px w-full my-1"></div>
+                            <p class="text-kzblue-900"><span class="font-bold text-kzblue-800">Бүгінгі маңызы:</span> Қазіргі ақпарат ғасырында адамдарды тыңдай білу мәдениеті мен ұждан, ар-ұят мәселелерінің құндылығын еске салады.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 2 -->
+                <div class="glass-card rounded-2xl p-6 flex flex-col h-full relative overflow-hidden group">
+                    <div class="text-center mb-6 relative z-10 border-b border-kzblue-200 pb-4">
+                        <i class="fas fa-gavel text-3xl text-kzblue-700 mb-3"></i>
+                        <h4 class="font-serif font-bold text-xl text-kzblue-900 italic leading-snug">
+                            «Дау мұраты – біту,<br>
+                            Сауда мұраты – ұту,<br>
+                            Жол мұраты – жету,<br>
+                            Қыз мұраты – кету.»
+                        </h4>
+                    </div>
+                    
+                    <!-- Student Inputs -->
+                    <div class="space-y-4 flex-grow relative z-10" id="student-inputs-2">
+                        <div>
+                            <label class="block font-bold text-kzblue-800 uppercase tracking-wide text-xs mb-1.5"><i class="fas fa-history text-gold-600 mr-1"></i> Мағынасы мен тарихи контексті</label>
+                            <textarea id="ta-magyna-2" rows="2" class="w-full bg-kzblue-100/30 border border-kzblue-300/50 rounded-lg p-3 text-kzblue-900 placeholder-kzblue-800/40 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:bg-white/60 transition-all custom-scrollbar resize-none" placeholder="Өз ойыңызды осында жазыңыз..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-kzblue-800 uppercase tracking-wide text-xs mb-1.5"><i class="fas fa-paint-brush text-gold-600 mr-1"></i> Көркемдік құндылығы</label>
+                            <textarea id="ta-korkemdik-2" rows="2" class="w-full bg-kzblue-100/30 border border-kzblue-300/50 rounded-lg p-3 text-kzblue-900 placeholder-kzblue-800/40 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:bg-white/60 transition-all custom-scrollbar resize-none" placeholder="Өз ойыңызды осында жазыңыз..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-kzblue-800 uppercase tracking-wide text-xs mb-1.5"><i class="fas fa-lightbulb text-gold-600 mr-1"></i> Бүгінгі маңызы</label>
+                            <textarea id="ta-bugingi-2" rows="2" class="w-full bg-kzblue-100/30 border border-kzblue-300/50 rounded-lg p-3 text-kzblue-900 placeholder-kzblue-800/40 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:bg-white/60 transition-all custom-scrollbar resize-none" placeholder="Өз ойыңызды осында жазыңыз..."></textarea>
+                        </div>
+                        
+                        <button id="btn-check-2" onclick="checkAndShowModel(2)" class="w-full mt-2 bg-kzblue-800 hover:bg-kzblue-700 text-white font-semibold py-2.5 rounded-xl transition-all shadow-md">
+                            <i class="fas fa-check-circle mr-1"></i> Жауапты сақтау және Үлгіні көру
+                        </button>
+                    </div>
+                    
+                    <!-- Model Answer (Hidden initially) -->
+                    <div id="model-answer-2" class="hidden mt-6 pt-4 border-t-2 border-gold-400 border-dashed animate-[fadeIn_0.5s_ease-in-out]">
+                        <h5 class="text-center font-bold text-gold-600 uppercase tracking-widest text-xs mb-4 bg-gold-100/30 py-1 rounded-full border border-gold-300/50"><i class="fas fa-star mr-1"></i> Үлгі жауап</h5>
+                        <div class="space-y-3 text-sm">
+                            <p class="text-kzblue-900"><span class="font-bold text-kzblue-800">Мағынасы:</span> Тіршіліктегі әрбір іс-әрекеттің түпкі мақсаты мен логикалық аяқталу нүктесі бар екенін білдіреді. Дау шешілу үшін, жол жету үшін жасалады.</p>
+                            <div class="bg-kzblue-900/5 h-px w-full my-1"></div>
+                            <p class="text-kzblue-900"><span class="font-bold text-kzblue-800">Көркемдігі:</span> Аллитерация мен ассонансқа құрылған параллелизм. Жинақы, нақты әрі философиялық терең түйін.</p>
+                            <div class="bg-kzblue-900/5 h-px w-full my-1"></div>
+                            <p class="text-kzblue-900"><span class="font-bold text-kzblue-800">Бүгінгі маңызы:</span> Қандай да бір істі бастағанда оның нәтижесіне бағдарлану, мақсатқа жету және дау-жанжалды бейбіт шешудің маңыздылығын түсіндіреді.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 3 -->
+                <div class="glass-card rounded-2xl p-6 flex flex-col h-full relative overflow-hidden group">
+                    <div class="text-center mb-6 relative z-10 border-b border-kzblue-200 pb-4">
+                        <i class="fas fa-scroll text-3xl text-gold-600 mb-3"></i>
+                        <h4 class="font-serif font-bold text-lg text-kzblue-900 italic leading-snug">
+                            «Арқаң қара нардай жауыр болсын,<br>
+                            Мінезің қара жердей ауыр болсын.<br>
+                            Өкпең жоқ, бауыр болсын.»
+                        </h4>
+                    </div>
+                    
+                    <!-- Student Inputs -->
+                    <div class="space-y-4 flex-grow relative z-10" id="student-inputs-3">
+                        <div>
+                            <label class="block font-bold text-kzblue-800 uppercase tracking-wide text-xs mb-1.5"><i class="fas fa-history text-gold-600 mr-1"></i> Мағынасы мен тарихи контексті</label>
+                            <textarea id="ta-magyna-3" rows="2" class="w-full bg-kzblue-100/30 border border-kzblue-300/50 rounded-lg p-3 text-kzblue-900 placeholder-kzblue-800/40 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:bg-white/60 transition-all custom-scrollbar resize-none" placeholder="Өз ойыңызды осында жазыңыз..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-kzblue-800 uppercase tracking-wide text-xs mb-1.5"><i class="fas fa-paint-brush text-gold-600 mr-1"></i> Көркемдік құндылығы</label>
+                            <textarea id="ta-korkemdik-3" rows="2" class="w-full bg-kzblue-100/30 border border-kzblue-300/50 rounded-lg p-3 text-kzblue-900 placeholder-kzblue-800/40 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:bg-white/60 transition-all custom-scrollbar resize-none" placeholder="Өз ойыңызды осында жазыңыз..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-kzblue-800 uppercase tracking-wide text-xs mb-1.5"><i class="fas fa-lightbulb text-gold-600 mr-1"></i> Бүгінгі маңызы</label>
+                            <textarea id="ta-bugingi-3" rows="2" class="w-full bg-kzblue-100/30 border border-kzblue-300/50 rounded-lg p-3 text-kzblue-900 placeholder-kzblue-800/40 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:bg-white/60 transition-all custom-scrollbar resize-none" placeholder="Өз ойыңызды осында жазыңыз..."></textarea>
+                        </div>
+                        
+                        <button id="btn-check-3" onclick="checkAndShowModel(3)" class="w-full mt-2 bg-kzblue-800 hover:bg-kzblue-700 text-white font-semibold py-2.5 rounded-xl transition-all shadow-md">
+                            <i class="fas fa-check-circle mr-1"></i> Жауапты сақтау және Үлгіні көру
+                        </button>
+                    </div>
+                    
+                    <!-- Model Answer (Hidden initially) -->
+                    <div id="model-answer-3" class="hidden mt-6 pt-4 border-t-2 border-gold-400 border-dashed animate-[fadeIn_0.5s_ease-in-out]">
+                        <h5 class="text-center font-bold text-gold-600 uppercase tracking-widest text-xs mb-4 bg-gold-100/30 py-1 rounded-full border border-gold-300/50"><i class="fas fa-star mr-1"></i> Үлгі жауап</h5>
+                        <div class="space-y-3 text-sm">
+                            <p class="text-kzblue-900"><span class="font-bold text-kzblue-800">Мағынасы:</span> Бұл – Малайсары қарттың Сырымға берген батасы. Ел бастаған ердің жүгі ауыр (нардай), сабырлы болу керек (жердей), кекшіл емес, кешірімді болу қажет (бауырмал) екенін меңзейді.</p>
+                            <div class="bg-kzblue-900/5 h-px w-full my-1"></div>
+                            <p class="text-kzblue-900"><span class="font-bold text-kzblue-800">Көркемдігі:</span> Эпитеттер («қара нар», «қара жер») мен метафоралық теңеулер арқылы көшбасшының бейнесі сомдалған. Шешендік бата үлгісі.</p>
+                            <div class="bg-kzblue-900/5 h-px w-full my-1"></div>
+                            <p class="text-kzblue-900"><span class="font-bold text-kzblue-800">Бүгінгі маңызы:</span> Заманауи көшбасшыларға қойылатын басты талап – сабырлық, төзімділік және халықпен кері байланыс орната білу екенін түсіндіреді.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ТАБ 2: ШЕШЕНДІК СӨЗ (Мәтін) -->
+        <section id="story" class="tab-content">
+            <div class="glass-panel rounded-3xl p-8 md:p-12 relative overflow-hidden">
+                <div class="absolute -top-20 -right-20 text-kzblue-700 opacity-5 pointer-events-none">
+                    <i class="fas fa-book-open text-[20rem]"></i>
+                </div>
+                
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-kzblue-900 mb-8 text-center drop-shadow-sm border-b-2 border-gold-500 pb-4 inline-block mx-auto w-full">Сырым Датұлы мен Ақсуат би</h2>
+                
+                <div class="prose prose-lg max-w-none font-serif text-kzblue-950 leading-loose space-y-6 relative z-10">
+                    <p class="first-letter:text-5xl first-letter:font-bold first-letter:text-gold-600 first-letter:float-left first-letter:mr-3 first-letter:mt-1">
+                        Өз заманында Сырым Датұлы жер мен жесір дауы, адам құқығы, ұрлық, барымта және тағы да басқа қоғамдағы орын алған дауларға араласып, тура, әділ билік айтып, елдің бітімшісі ретінде танылған, шым-шытырық дау-шарды егжей-тегжейлі саралап, жіктеп сөйлей білген.
+                    </p>
+                    
+                    <p>
+                        Бірде Сырым ақылды қария Малайсарыдан бата алмақшы болады. Көпті көрген көне қарт: «Батамды беремін, көңілімде жүрген бір іс бар еді, – дейді. – Байұлының бір баласын Әлім жігіттері өлтірген еді. Соның жоқтаушысы жоқ. Ердің құнын жастың жайсаңы даулайды, не кәрінің сайтаны даулайды деуші еді», – деп күрсінеді. Сырым еліктей ұшып, Малайсары айтқан елге, сол ауылдың ақылауыз ақсақалы Ақсуат биге келеді.
+                    </p>
+                    
+                    <div class="bg-kzblue-100/50 p-6 rounded-xl border-l-4 border-gold-500 my-6">
+                        <p>– Уа, тоқтаңдар, шаңқай түсте шабатындай, ауылымның үстін шаңдатып келе жатқан бұл кім, түге?! – деп би ақырады. Сырым:</p>
+                        <p class="mt-2 font-bold text-kzblue-800">
+                            – Уа, би, ел десең – елміз, жау десең – жаумыз. Алты қырдың астынан жаяулатып келетін Байұлы Әлімнің келіні емеспіз, бізбен дұрыстап сөйлесіңіз, – дейді.
+                        </p>
+                    </div>
+                    
+                    <p>
+                        Ақсуаттың бір жігіті бидің құлағына сыбырлап: «Өздері он екі аттылы екен», – дейді. Ақсуат: «Онда он екі ата Байұлы түгел атқа мінген екен, үш-төрттен үй-үйге бөліп түсіріңдер», – дейді. Сырым екі жолдасымен Ақсуаттың үйіне түседі, бірақ би шешіліп сөйлесе қоймайды.
+                    </p>
+                    
+                    <p>Сырым: – Би, аты-жөн сұраса отырайық, – дейді. Ақсуат:</p>
+                    <p class="italic text-kzblue-800">
+                        – Бала, менің аты-жөнімді сұрайсың, елімді сұрасаң – Әлім, жерімді сұрасаң – Бұйырғын, атымды сұрасаң – Ақсуат, осы елдің ортасындағы бір қазығымын, айналамнан ел кетпейді, алдымнан дау кетпейді, – дейді.
+                    </p>
+                    
+                    <p>Ілік іздеп отырған Сырым:</p>
+                    <p class="font-bold text-kzblue-900 border-b border-gold-300 pb-2 inline-block">
+                        – Би, сөз білсеңіз, суатпын деп мақтанбаңыз, су жаманы – суат, басынан соқпақ кетпейді, қазықпын деп мақтанбаңыз, мүлік жаманы – қазық, басынан тоқпақ кетпейді, бұйырғын деген шөп болады, мал тоқ болады, қауқары жоқ болады. Әлім болсаң, әліңді біл, адамның құнын бер, – дейді.
+                    </p>
+                    
+                    <p>
+                        Жамбастап жатқан Ақсуат басын көтеріп:
+                        <br>– Сырым балам, сырыңды енді ұқтым. Байұлының бір адамы біздің елде жазым болуы рас еді. Ердің құны – мың қой, үлесе келе үй басына – бір қой. Бір қойдан Әлімнің үйі кедейленіп қалмайды, жоқтаушысы кездеспей жүр, жоқтаушысы болса, табылмайтын жоқ болмайды, жорта өлтірген емес, жортуылда болған жазым ғой, төрелігін өзіңе бердім, ағаңның құнын өзің айта ғой, – дейді.
+                    </p>
+                    
+                    <p>
+                        Сырым:
+                        <br>– Мың тоқты – бір қора қойдың жазғы төлі, сонымен мен де Байұлын байытайын деп келгенім жоқ. Ел арасында бүтінші-бітімші болайын деп келдім, егер билікті маған берсеңіз, жортуылда болған жазым дедіңіз ғой, ұрының құны – жарты құн, елу қара болсын, – дейді.
+                    </p>
+                    
+                    <p>
+                        Осыған екі жақ та тоқтайды, тиісті малын алып, Байұлының жігіттері жүргелі тұрғанда Ақсуат:
+                        <br>– Сырым балам, ел арасына бүтінші-бітімші болайын деп келдім дедің-ау! Баланың екі түрі болады: үй баласы, ел баласы. Ел арасының бүтіндігін ойлап, ел ағасы болайын деген бала екенсің. Мұратыңа жет, жолың болсын, менің алдымда бірінші айтқан билігің екен, әділдігің үшін жолыңа нар бастаған тоғыз байлатып қойдым, бұдан былай сенің жолың бас тоғыз болсын, – деп Сырыммен қоштасыпты.
+                    </p>
+                    
+                    <div class="mt-8 bg-gradient-to-r from-kzblue-900 to-kzblue-700 text-white p-8 rounded-2xl shadow-xl">
+                        <h4 class="text-2xl font-bold text-gold-400 mb-4 border-b border-gold-600/50 pb-2">Малайсары қарттың батасы</h4>
+                        <p class="mb-4">Сырым елу жылқыны елге айдатып, олжасын жолдастарына үлестіріп, қалы кілем жабылған қара нарды Малайсары қарттың босағасына әкеліп байлайды. Риза болған би батасын береді:</p>
+                        
+                        <blockquote class="italic text-xl text-center my-6 text-gold-100 font-semibold leading-relaxed">
+                            «Арқаң қара нардай жауыр болсын,<br>
+                            Мінезің қара жердей ауыр болсын.<br>
+                            Өкпең жоқ, бауыр болсын.<br>
+                            Үйіңнің сыртынан дүбір кетпесін,<br>
+                            Құлағыңнан сыбыр кетпесін!»
+                        </blockquote>
+                        
+                        <p>«Мен не десем де, бәрінің мағынасы бар, қалай түсінгеніңді өзіме қайырып бер», – дейді қарт. Сырым:</p>
+                        <ul class="space-y-3 mt-4 text-kzblue-100 list-disc pl-5">
+                            <li><span class="text-gold-300 font-bold">«Арқаң қара нардай жауыр болсын»</span> дегеніңіз – ел бастайтын ердің жүгі ауыр, арқама батты деп ауырсынба дегеніңіз болар.</li>
+                            <li><span class="text-gold-300 font-bold">«Мінезің қара жердей ауыр болсын»</span> дегеніңіз – сабырлы, шыдамды бол, беріден ойлама, әріден ойла дегеніңіз болар.</li>
+                            <li><span class="text-gold-300 font-bold">«Өкпең жоқ, бауыр бол»</span> дегеніңіз – өкпешіл болма, кешірімді кең бол, ат төбеліндей аз ғана қазақты алыс-жақын деп бөле-жарма, алақұла көрме дегеніңіз болар.</li>
+                            <li><span class="text-gold-300 font-bold">«Үйіңнің сыртынан дүбір кетпесін, құлағыңнан сыбыр кетпесін»</span> дегеніңіз – жора-жолдасың болсын, ел мұңына, жетім-жесірге құлағың түрік, есігің ашық болсын дегеніңіз болар, – деп жауап қайтарыпты.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ТАБ 3: ЗИЯТКЕРЛІК АЛАҢ (Ойын) -->
+        <section id="game" class="tab-content">
+            <div class="glass-panel rounded-3xl shadow-2xl p-6 md:p-10 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-kzblue-700/20 via-transparent to-transparent pointer-events-none"></div>
+                
+                <div class="text-center mb-10 border-b-2 pb-6 border-kzblue-800/20 relative z-10">
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-kzblue-900 tracking-wide uppercase"><i class="fas fa-tv text-gold-500 mr-3"></i>Зияткерлік алаң</h2>
+                    <p class="text-kzblue-800 mt-3 font-medium text-lg">«Балаби мен Сырым» оқиғасы бойынша жасырылған сұрақтарға жауап беріңіз.</p>
+                </div>
+                
+                <div class="game-grid relative z-10" id="game-grid">
+                    <!-- Уяшықтар JS арқылы генерацияланады -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Jeopardy Question Modal (Deep Blue/Gold) -->
+    <div id="game-modal" class="fixed inset-0 modal-overlay z-50 hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+        <div class="bg-gradient-to-b from-kzblue-800 to-kzblue-950 rounded-2xl shadow-[0_0_40px_rgba(212,175,55,0.3)] max-w-xl w-full overflow-hidden transform scale-95 transition-all duration-300 border-2 border-gold-500" id="game-modal-content">
+            <div class="p-5 text-center relative border-b border-gold-500/30 bg-kzblue-900">
+                <button onclick="closeGameModal()" class="absolute top-4 right-4 text-kzblue-300 hover:text-white transition-colors">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+                <div class="text-gold-400 font-bold text-2xl uppercase tracking-widest"><span id="game-modal-points"></span> ҰПАЙ</div>
+            </div>
+            <div class="p-8 text-center text-white">
+                <p id="game-modal-question" class="text-2xl md:text-3xl font-serif font-medium leading-relaxed drop-shadow-md text-kzblue-100"></p>
+                
+                <div id="game-modal-answer-box" class="mt-8 pt-6 border-t border-kzblue-700 hidden">
+                    <p class="text-gold-400 text-sm font-bold mb-2 uppercase tracking-wider">Жауабы:</p>
+                    <p id="game-modal-answer" class="text-xl md:text-2xl font-bold text-white"></p>
+                </div>
+            </div>
+            <div class="bg-kzblue-950 p-4 text-center border-t border-kzblue-800">
+                <button id="btn-show-answer" onclick="showGameAnswer()" class="bg-gold-500 hover:bg-gold-400 text-kzblue-950 font-bold py-3 px-8 rounded-xl transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)] text-lg">
+                    <i class="fas fa-eye mr-2"></i> Жауапты көру
+                </button>
+                <button onclick="closeGameModal()" class="text-kzblue-300 hover:text-white font-medium ml-4 underline underline-offset-4 hidden" id="btn-close-modal">Жалғастыру</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Warning Modal for Empty Inputs -->
+    <div id="warning-modal" class="fixed inset-0 modal-overlay z-[60] hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+        <div class="bg-gradient-to-b from-kzblue-800 to-kzblue-950 rounded-2xl shadow-[0_0_40px_rgba(212,175,55,0.3)] max-w-sm w-full overflow-hidden transform scale-95 transition-all duration-300 border-2 border-gold-500" id="warning-modal-content">
+            <div class="p-8 text-center relative">
+                <i class="fas fa-exclamation-triangle text-5xl text-gold-400 mb-4 drop-shadow-lg"></i>
+                <h3 id="warning-title" class="text-2xl font-serif font-bold text-white mb-3"></h3>
+                <p id="warning-message" class="text-kzblue-100 font-medium leading-relaxed"></p>
+                <button onclick="closeWarningModal()" class="mt-8 bg-gold-500 hover:bg-gold-400 text-kzblue-950 font-bold py-2.5 px-8 rounded-xl transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)] w-full">
+                    Түсіндім
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ДЫБЫСТЫҚ ЭФФЕКТІЛЕР (Tone.js)
+        let synth;
+        let successSynth;
+        
+        async function initAudio() {
+            if (!synth) {
+                await Tone.start();
+                synth = new Tone.Synth({
+                    oscillator: { type: "sine" },
+                    envelope: { attack: 0.01, decay: 0.1, sustain: 0.1, release: 0.5 }
+                }).toDestination();
+                synth.volume.value = -12;
+                
+                successSynth = new Tone.PolySynth(Tone.Synth).toDestination();
+                successSynth.volume.value = -12;
+            }
+        }
+
+        function playClick() {
+            initAudio();
+            if(synth) synth.triggerAttackRelease("C5", "32n");
+        }
+
+        function playPop() {
+            initAudio();
+            if(synth) synth.triggerAttackRelease("E5", "16n");
+        }
+
+        function playSuccess() {
+            initAudio();
+            if(successSynth) {
+                const now = Tone.now();
+                successSynth.triggerAttackRelease(["C4", "E4", "G4"], "8n", now);
+                successSynth.triggerAttackRelease(["E4", "G4", "C5"], "2n", now + 0.2);
+            }
+        }
+
+        // Нақыл сөздерді тексеру логикасы
+        function checkAndShowModel(id) {
+            playClick();
+            const magyna = document.getElementById(`ta-magyna-${id}`).value.trim();
+            const korkemdik = document.getElementById(`ta-korkemdik-${id}`).value.trim();
+            const bugingi = document.getElementById(`ta-bugingi-${id}`).value.trim();
+
+            if (magyna === "" || korkemdik === "" || bugingi === "") {
+                showWarningModal("Назар аударыңыз!", "Үлгі жауапты көру үшін алдымен барлық үш бағыт (Мағынасы, Көркемдігі, Бүгінгі маңызы) бойынша өз ойыңызды толық жазуыңыз қажет.");
+                return;
+            }
+
+            // Барлығы толтырылған болса
+            playSuccess();
+            
+            // Үлгі жауапты көрсету
+            document.getElementById(`model-answer-${id}`).classList.remove('hidden');
+            
+            // Текстік өрістерді құлыптау (өзгертуге жол бермеу)
+            document.getElementById(`ta-magyna-${id}`).disabled = true;
+            document.getElementById(`ta-korkemdik-${id}`).disabled = true;
+            document.getElementById(`ta-bugingi-${id}`).disabled = true;
+            
+            // Өрістердің визуалды стилін өзгерту
+            [ `ta-magyna-${id}`, `ta-korkemdik-${id}`, `ta-bugingi-${id}` ].forEach(field => {
+                document.getElementById(field).classList.add('opacity-70', 'bg-kzblue-100/50', 'border-transparent');
+                document.getElementById(field).classList.remove('focus:ring-2', 'bg-kzblue-100/30');
+            });
+            
+            // Батырманы жасыру
+            document.getElementById(`btn-check-${id}`).classList.add('hidden');
+        }
+
+        function showWarningModal(title, message) {
+            document.getElementById('warning-title').textContent = title;
+            document.getElementById('warning-message').textContent = message;
+            
+            const modal = document.getElementById('warning-modal');
+            const content = document.getElementById('warning-modal-content');
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeWarningModal() {
+            playClick();
+            const modal = document.getElementById('warning-modal');
+            const content = document.getElementById('warning-modal-content');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Вкладка ауыстыру
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active', 'bg-gold-500', 'text-kzblue-950', 'shadow-[0_0_15px_rgba(212,175,55,0.4)]');
+                el.classList.add('bg-kzblue-800', 'text-kzblue-100');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            
+            const activeBtn = document.querySelector(`button[onclick*="switchTab('${tabId}')"]`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-kzblue-800', 'text-kzblue-100');
+                activeBtn.classList.add('active', 'bg-gold-500', 'text-kzblue-950', 'shadow-[0_0_15px_rgba(212,175,55,0.4)]');
+            }
+        }
+
+        // Дерекқор: Зияткерлік алаң (12 сұрақ - мәтін бойынша)
+        const gameData = [
+            // 1 қатар: 10 ұпай
+            { points: 10, q: "Малайсары қарт кімнің кегін жоқтап отырды?", a: "Байұлының бір баласының (Әлім жігіттері өлтірген)." },
+            { points: 10, q: "«Ердің құнын кімдер даулайды?» деген мәтел мәтінде қалай айтылған?", a: "Жастың жайсаңы не кәрінің сайтаны даулайды." },
+            { points: 10, q: "Сырым барып түскен ақылауыз ақсақалдың аты кім?", a: "Ақсуат би." },
+            { points: 10, q: "Сырым Ақсуаттың ауылына неше адам болып барды?", a: "Он екі аттылы болып (өзі және екі жолдасымен үйіне түседі)." },
+            
+            // 2 қатар: 20 ұпай
+            { points: 20, q: "Ақсуат би өзін және жерін қалай таныстырды?", a: "«Елім – Әлім, жерім – Бұйырғын, өзім елдің ортасындағы қазықпын»." },
+            { points: 20, q: "Сырым «қазықпын» деген сөзге қалай тойтарыс берді?", a: "«Мүлік жаманы – қазық, басынан тоқпақ кетпейді» деді." },
+            { points: 20, q: "Ердің құны Ақсуат бидің айтуынша қанша?", a: "Мың қой (үй басына бір қойдан)." },
+            { points: 20, q: "Сырым жортуылдағы жазым үшін қанша құн сұрады?", a: "Жарты құн, елу қара (жылқы) сұрады." },
+            
+            // 3 қатар: 30 ұпай
+            { points: 30, q: "Ақсуат Сырымға әділдігі үшін жолына не байлады?", a: "Нар бастаған тоғыз байлады («жолың бас тоғыз болсын»)." },
+            { points: 30, q: "«Арқаң қара нардай жауыр болсын» дегенді Сырым қалай түсіндірді?", a: "Ел бастайтын ердің жүгі ауыр, арқама батты деп ауырсынба дегеніңіз." },
+            { points: 30, q: "«Мінезің қара жердей ауыр болсын» деген батаның мағынасы қандай?", a: "Сабырлы, шыдамды бол, әріден ойла." },
+            { points: 30, q: "«Үйіңнің сыртынан дүбір, құлағыңнан сыбыр кетпесін» дегені не?", a: "Ел мұңына құлағың түрік, есігің ашық болсын." }
+        ];
+
+        // Ойынды құрастыру
+        function renderGame() {
+            const container = document.getElementById('game-grid');
+            let html = '';
+            
+            gameData.forEach((item, index) => {
+                html += `
+                <div class="game-card" id="game-card-${index}" onclick="openGameModal(${index}, '${item.q.replace(/'/g, "\\'")}', '${item.a.replace(/'/g, "\\'")}', ${item.points})">
+                    ${item.points}
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        let currentGameCardId = null;
+
+        function openGameModal(index, question, answer, points) {
+            playPop();
+            currentGameCardId = `game-card-${index}`;
+            document.getElementById('game-modal-points').textContent = points;
+            document.getElementById('game-modal-question').textContent = question;
+            document.getElementById('game-modal-answer').textContent = answer;
+            
+            // Жасыру/Көрсету
+            document.getElementById('game-modal-answer-box').classList.add('hidden');
+            document.getElementById('btn-show-answer').classList.remove('hidden');
+            document.getElementById('btn-close-modal').classList.add('hidden');
+            
+            const modal = document.getElementById('game-modal');
+            const content = document.getElementById('game-modal-content');
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function showGameAnswer() {
+            playSuccess();
+            document.getElementById('game-modal-answer-box').classList.remove('hidden');
+            document.getElementById('btn-show-answer').classList.add('hidden');
+            document.getElementById('btn-close-modal').classList.remove('hidden');
+            
+            // Уяшықты өшіру (Сұр түске айналдыру)
+            if(currentGameCardId) {
+                document.getElementById(currentGameCardId).classList.add('played');
+                document.getElementById(currentGameCardId).innerHTML = '<i class="fas fa-check text-kzblue-900/40"></i>';
+            }
+        }
+
+        function closeGameModal() {
+            playClick();
+            const modal = document.getElementById('game-modal');
+            const content = document.getElementById('game-modal-content');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.addEventListener('click', initAudio, { once: true });
+            renderGame();
+        });
+    </script>
+</body>
+</html>
